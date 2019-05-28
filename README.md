@@ -1,4 +1,4 @@
-# Magnitie - The-Metal-Finder
+# Magnitie - The Metal Finder
 
 ## Introduction
 
