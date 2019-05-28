@@ -1,4 +1,9 @@
 enum MotorsStates {WaitM, MotorsOn} MotorsState;
+	
+//Global variable
+unsigned char buttonPressed; //Global variables
+unsigned char MetalDetected;
+
 int MotorsTick(int state){
 	switch(state){
 		case WaitM:

@@ -1,4 +1,7 @@
 enum ButtonStates {ButtonStart, WaitForButton, SendButtonSignal} ButtonState;
+
+unsigned char buttonPressed; //Global variable
+
 int ButtonTick(int state){
 	unsigned char b = ~PINA & 0x02;
 	static unsigned char i;

@@ -1,4 +1,7 @@
 enum DetectMetalStates {DetectMetalStart, WaitForMetal, MetalSignal} DetectMetalState;
+
+unsigned char MetalDetected; //Global variable
+
 int DetectMetalTick(int state){
 	static unsigned char i;
 	const unsigned short threshHold = 156;

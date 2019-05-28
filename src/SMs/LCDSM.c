@@ -1,5 +1,10 @@
 enum LCDStates {LCDStart, LCDWaitForButon, SadFace, HappyFace} LCDstate;
 
+unsigned char buttonPressed; //Global variables
+unsigned char MetalDetected;
+
+void InitCustomCharacters(); //Helper function
+
 int LCDTick(int state){                   
 	static unsigned char i;
 	switch(state){
