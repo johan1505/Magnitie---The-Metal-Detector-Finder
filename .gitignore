@@ -12,3 +12,4 @@
 *.o
 *.mk
 Makefile
+src/SMs/.vscode/
