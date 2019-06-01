@@ -4,7 +4,7 @@ unsigned char MetalDetected; //Global variable
 
 int DetectMetalTick(int state){
 	static unsigned char i;
-	const unsigned short threshHold = 156;
+	const unsigned short threshHold = 300;
 	switch(state){	
 		case DetectMetalStart:
 			state = WaitForMetal;
