@@ -5,7 +5,7 @@ unsigned char buttonPressed; //Global variable
 int ButtonTick(int state){
 	unsigned char b = ~PINA & 0x02;
 	static unsigned char i;
-	switch(state){
+	switch(state){	
 		case WaitForButton:
 			if (b){
 				state = SendButtonSignal;
@@ -29,6 +29,7 @@ int ButtonTick(int state){
 			state = WaitForButton;
 			break;
 	}
+	
 	switch(state){
 		case WaitForButton:
 			buttonPressed = 0;

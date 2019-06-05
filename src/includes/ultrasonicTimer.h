@@ -1,9 +1,3 @@
-
-// Permission to copy is granted provided that this header remains intact. 
-// This software is provided with no warranties.
-
-////////////////////////////////////////////////////////////////////////////////
-
 #ifndef TIMER_H
 #define TIMER_H
 
@@ -23,7 +17,7 @@ void TimerSet(unsigned long M) {
 
 void TimerOn() {
 	// AVR timer/counter controller register TCCR1
-	TCCR1B 	= 0x0B;// | (1<<CS11);	// bit3 = 1: CTC mode (clear timer on compare)
+	TCCR1B 	= (1<<CS11);	// bit3 = 1: CTC mode (clear timer on compare)
 					// bit2bit1bit0=011: prescaler /64
 					// 00001011: 0x0B
 					// SO, 8 MHz clock or 8,000,000 /64 = 125,000 ticks/s

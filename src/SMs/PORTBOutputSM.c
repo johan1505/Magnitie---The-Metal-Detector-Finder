@@ -8,7 +8,7 @@ int PORTBOutputTick(int state){
 	switch(state){
 		case Output:
 			state = Output;
-			PORTB = (LightsOutput << 2) | MotorsOutput;
+			PORTB = (LightsOutput << 3) | MotorsOutput;
 			break;
 	}
 	return state;

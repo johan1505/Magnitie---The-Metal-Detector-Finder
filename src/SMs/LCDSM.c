@@ -1,53 +1,74 @@
-enum LCDStates {LCDStart, LCDWaitForButon, SadFace, HappyFace} LCDstate;
+#include "EEPROM.h"
+enum LCDStates {LCDStart, LCDWaitForButon, NormalFace, SadFace, HappyFace, ObstacleWarning} LCDstate;
 
 //Global variables
 unsigned char buttonPressed;
 unsigned char MetalDetected;
+unsigned char BREAK;
 unsigned int MetalsFound; // Number of metals found as Magnitie travels
 
 //Helper functions
 void InitCustomCharacters();
 void DisplayMetalsFound(int MetalsFound);
+void DisplayRecordOfMetals(unsigned int record);
+void DisplayClear();
+void DisplayObstacleWarning();
 
 int LCDTick(int state){
 	static unsigned char i;
-	switch(state){
+	switch(state){		
 		case LCDStart:
 			LCD_DisplayString(1, "Press the button to start! :D"); //Display the start message
 			state = LCDWaitForButon;
 			break;
 		
-		case LCDWaitForButon:
-			if (buttonPressed){
-				state = SadFace;
+		case LCDWaitForButon: // Wait for button. Need to consider the BREAK signal here before starting
+			if (buttonPressed && !BREAK){
+				state = NormalFace;
 				i = 0;
-				LCD_DisplayString(1, "               ");// Clear the screen
-				InitCustomCharacters(); // Initialize the sad face
+				LCD_DisplayString(1, "                              ");
+				InitCustomCharacters(); // Initialize 
+				DisplayClear();
+			}
+			else if (BREAK){ // if there is a break than go to the ObstacleDetected state regardless
+				state = ObstacleWarning;
+				LCD_ClearScreen();
+				LCD_DisplayString(1, "    OBSTACLE        DETECTED    ");// Display obstacle detected warning
 			}
 			else {
 				state = LCDWaitForButon;
 			}
 			break;
 		
-		case SadFace:
+		case NormalFace:
 			if (MetalDetected){
+				state = HappyFace;
+				// Display happy mouth
+				LCD_Cursor(29);
+				LCD_WriteData(1);
 				LCD_Cursor(30);
 				LCD_WriteData(2);
-				state = HappyFace;
-				LCD_Cursor(29);   // Display the happy mouth
-				LCD_WriteData(1);
+			}
+			else if (BREAK){
+				state = SadFace;
+				DisplayObstacleWarning();
+				//Display sad mouth
+				LCD_Cursor(29);
+				LCD_WriteData(3);
+				LCD_Cursor(30);
+				LCD_WriteData(4);
 			}
 			else {
-				state = SadFace;
+				state = NormalFace;
 			}
 			break;
 		
 		case HappyFace:
-			if (i < 10 || MetalDetected){ // Once a metal is detected, keep the Displaying Happy face for 5 second
+			if (i < 6 || MetalDetected){ // Once a metal is detected, keep the Displaying Happy face for 3 seconds
 				state = HappyFace;
 			}
-			else if (i >= 10 && !MetalDetected){
-				state = SadFace;
+			else if (i >= 6 && !MetalDetected){
+				state = NormalFace;
 				i = 0;
 				LCD_Cursor(29);   // Display the sad mouth
 				LCD_WriteData(5);
@@ -56,6 +77,31 @@ int LCDTick(int state){
 			}
 			break;
 		
+		case SadFace:
+			if (BREAK){
+				state = SadFace;
+			}
+			else {
+				state = NormalFace;
+				DisplayClear();
+				LCD_Cursor(29);   // Displays the normal mouth
+				LCD_WriteData(5);
+				LCD_Cursor(30);
+				LCD_WriteData(6);				
+			}
+			break;
+			
+		case ObstacleWarning:
+			if (BREAK){
+				state = BREAK;
+			}
+			else {
+				state = LCDWaitForButon;
+				LCD_ClearScreen();
+				LCD_DisplayString(1, "Press the button to start! :D");
+			}
+			break;
+			
 		default:
 			state = LCDStart;
 			break;
@@ -64,17 +110,23 @@ int LCDTick(int state){
 	switch(state){
 		case LCDStart:
 			break;
-		
+			
 		case LCDWaitForButon:
 			break;
 		
-		case SadFace:
+		case NormalFace:
 			break;
-
+			
 		case HappyFace:
 			i++;
 			break;
 		
+		case SadFace:
+			break;
+		
+		case ObstacleWarning:
+			break;
+			
 		default:
 			break;
 	}
@@ -112,20 +164,6 @@ void InitCustomCharacters(){                    //================EYE===========
 	LCD_WriteData('0');
 	LCD_Cursor(6);
 	LCD_WriteData('0');
-
-	LCD_Cursor(17);  //Displays 'O' for how far is an obstacle at
-	LCD_WriteData(0x4F);
-	LCD_Cursor(18);   //Displays Semicolon
-	LCD_WriteData(0x3A);
-	
-	LCD_Cursor(19);
-	LCD_WriteData('0');
-	LCD_Cursor(20);
-	LCD_WriteData('0');
-	LCD_Cursor(21);
-	LCD_WriteData('0');
-	LCD_Cursor(22);
-	LCD_WriteData('0');
 	
 	//Displaying White spaces of the face
 	LCD_Cursor(28);
@@ -158,4 +196,74 @@ void InitCustomCharacters(){                    //================EYE===========
 	LCD_WriteData(5);
 	LCD_Cursor(30);
 	LCD_WriteData(6);
+}
+
+void DisplayRecordOfMetals(unsigned int record){
+	char NumToDisplay[3] = {' ', ' ', ' '};
+	if (record >= 0 && record < 10){ // We know the integer is 1 digit
+		char t1[1];
+		sprintf(t1, "%d", record);
+		NumToDisplay[2] = t1[0];
+	}
+	else if (record >= 10 && record < 100){ // We know the integer is 2 digits
+		char t2[2];
+		sprintf(t2, "%d", record);
+		NumToDisplay[1] = t2[0];
+		NumToDisplay[2] = t2[1];
+	}
+	else if (record >= 100 && MetalsFound < 256){ // We know the integer is 3 digits
+		sprintf(NumToDisplay, "%d", record);
+	}
+	
+	//Displaying the number of MetalsFound in the LCD
+	for (unsigned char i = 0; i < 3; i++){
+		LCD_Cursor(i + 25);
+		LCD_WriteData(NumToDisplay[i]);
+	}
+}
+
+void DisplayClear(){
+	LCD_Cursor(17);
+	LCD_WriteData(0x43); //C
+	LCD_Cursor(18);
+	LCD_WriteData(0x7C); //l
+	LCD_Cursor(19);
+	LCD_WriteData(0x65); //e
+	LCD_Cursor(20);
+	LCD_WriteData(0x61); //a
+	LCD_Cursor(21);
+	LCD_WriteData(0x72); //r
+	LCD_Cursor(22);
+	LCD_WriteData(0x21); //!
+	LCD_Cursor(23);
+	LCD_WriteData(0x20); //" "
+	LCD_Cursor(24);
+	LCD_WriteData(0x20); //" "
+	LCD_Cursor(25);
+	LCD_WriteData(0x20); //" "
+	LCD_Cursor(26);
+	LCD_WriteData(0x20); //" "
+}
+
+void DisplayObstacleWarning(){
+	LCD_Cursor(17);
+	LCD_WriteData(0x4F); //O
+	LCD_Cursor(18);
+	LCD_WriteData(0x42); //B
+	LCD_Cursor(19);
+	LCD_WriteData(0x53); //S
+	LCD_Cursor(20);
+	LCD_WriteData(0x54); //T
+	LCD_Cursor(21);
+	LCD_WriteData(0x41); //A
+	LCD_Cursor(22);
+	LCD_WriteData(0x43); //C
+	LCD_Cursor(23);
+	LCD_WriteData(0x4C); //L
+	LCD_Cursor(24);
+	LCD_WriteData(0x45); //E
+	LCD_Cursor(25);
+	LCD_WriteData(0x21); //!
+	LCD_Cursor(26);
+	LCD_WriteData(0x21); //!
 }

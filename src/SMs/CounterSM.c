@@ -1,13 +1,21 @@
+
 enum CounterStates {CounterStart, Wait, CheckForMetals} CounterState;
-//Global variable
+//Global variables
 unsigned int  MetalsFound;
 unsigned char MetalDetected;
+unsigned char buttonPressed;
+
 
 int CounterTick(int state){
     switch (state){
         case CounterStart:
-            state = Wait;
-            MetalsFound = 0;
+			if (!buttonPressed){
+				state = CounterStart;
+			}
+			else {
+				state = Wait;
+				MetalsFound = 0;
+			}
             break;
 			
 		case Wait:
@@ -18,6 +26,7 @@ int CounterTick(int state){
 				}
 				else {                    // Else increase it
 					++MetalsFound;
+	
 				}
 				DisplayMetalsFound(MetalsFound);
 			}

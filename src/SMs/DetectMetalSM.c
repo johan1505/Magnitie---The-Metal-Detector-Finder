@@ -7,8 +7,13 @@ int DetectMetalTick(int state){
 	const unsigned short threshHold = 300;
 	switch(state){	
 		case DetectMetalStart:
-			state = WaitForMetal;
-			i = 0;
+			if (i < 50){
+				state = DetectMetalStart;
+			}
+			else {
+				state = WaitForMetal;
+				i = 0;
+			}
 			break;
 
 		case WaitForMetal:
@@ -16,10 +21,10 @@ int DetectMetalTick(int state){
 			break;
 		
 		case MetalSignal:	
-			if (i < 5 || ADC <= threshHold ){    // Once a metal is detected, rise the metalDetected flag for 1/2 second so that the LEDSM can read it 
+			if (i < 10 || ADC <= threshHold ){    // Once a metal is detected, rise the metalDetected flag for 1/2 second so that the LEDSM can read it 
 				state = MetalSignal;
 			}
-			else if (i >= 5 && ADC > threshHold){
+			else if (i >= 10 && ADC > threshHold){
 				state = WaitForMetal;
 				i = 0;
 			}
@@ -31,6 +36,7 @@ int DetectMetalTick(int state){
 	}
 	switch(state){
 		case DetectMetalStart:
+			i++;
 			break;
 			
 		case WaitForMetal:
