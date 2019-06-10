@@ -1,16 +1,11 @@
-#include "EEPROM.h"
 enum LCDStates {LCDStart, LCDWaitForButon, NormalFace, SadFace, HappyFace, ObstacleWarning} LCDstate;
-
 //Global variables
 unsigned char buttonPressed;
 unsigned char MetalDetected;
 unsigned char BREAK;
-unsigned int MetalsFound; // Number of metals found as Magnitie travels
 
 //Helper functions
 void InitCustomCharacters();
-void DisplayMetalsFound(int MetalsFound);
-void DisplayRecordOfMetals(unsigned int record);
 void DisplayClear();
 void DisplayObstacleWarning();
 
@@ -18,8 +13,8 @@ int LCDTick(int state){
 	static unsigned char i;
 	switch(state){		
 		case LCDStart:
+		state = LCDWaitForButon;
 			LCD_DisplayString(1, "Press the button to start! :D"); //Display the start message
-			state = LCDWaitForButon;
 			break;
 		
 		case LCDWaitForButon: // Wait for button. Need to consider the BREAK signal here before starting
@@ -93,11 +88,10 @@ int LCDTick(int state){
 			
 		case ObstacleWarning:
 			if (BREAK){
-				state = BREAK;
+				state = ObstacleWarning;
 			}
-			else {
+			else if (!BREAK){
 				state = LCDWaitForButon;
-				LCD_ClearScreen();
 				LCD_DisplayString(1, "Press the button to start! :D");
 			}
 			break;
@@ -196,30 +190,6 @@ void InitCustomCharacters(){                    //================EYE===========
 	LCD_WriteData(5);
 	LCD_Cursor(30);
 	LCD_WriteData(6);
-}
-
-void DisplayRecordOfMetals(unsigned int record){
-	char NumToDisplay[3] = {' ', ' ', ' '};
-	if (record >= 0 && record < 10){ // We know the integer is 1 digit
-		char t1[1];
-		sprintf(t1, "%d", record);
-		NumToDisplay[2] = t1[0];
-	}
-	else if (record >= 10 && record < 100){ // We know the integer is 2 digits
-		char t2[2];
-		sprintf(t2, "%d", record);
-		NumToDisplay[1] = t2[0];
-		NumToDisplay[2] = t2[1];
-	}
-	else if (record >= 100 && MetalsFound < 256){ // We know the integer is 3 digits
-		sprintf(NumToDisplay, "%d", record);
-	}
-	
-	//Displaying the number of MetalsFound in the LCD
-	for (unsigned char i = 0; i < 3; i++){
-		LCD_Cursor(i + 25);
-		LCD_WriteData(NumToDisplay[i]);
-	}
 }
 
 void DisplayClear(){

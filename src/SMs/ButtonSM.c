@@ -1,4 +1,4 @@
-enum ButtonStates {ButtonStart, WaitForButton, SendButtonSignal} ButtonState;
+enum ButtonStates {WaitForButton, SendButtonSignal} ButtonState;
 
 unsigned char buttonPressed; //Global variable
 

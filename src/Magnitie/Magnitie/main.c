@@ -26,7 +26,6 @@
 //Global Variables
 unsigned char MetalDetected;
 unsigned char buttonPressed;
-unsigned int  MetalsFound;
 unsigned char MotorsOutput;
 unsigned char LightsOutput;
 uint16_t  ObstacleDistance;
@@ -63,7 +62,8 @@ int main(void)
 	unsigned long int CompareDistPeriod = 25;  // Keep an eye on these two periods!
 	//Calculating GCD
 	unsigned long int tempGCD = findGCD(ButtonPeriod, LCDPeriod);
-	unsigned long int taskPeriodGCD = findGCD(tempGCD, DetectMetalPeriod);
+	tempGCD = findGCD(tempGCD, DetectMetalPeriod);
+	unsigned long int taskPeriodGCD = findGCD(tempGCD, UltrasonicSensorPeriod);
 	
 	//Set up of the array of tasks
 	task *tasks[] = {&task1, &task2, &task3, &task4, &task5, &task6, &task7, &task8, &task9,};
@@ -82,7 +82,7 @@ int main(void)
 	task2.TickFct = &LCDTick;
 	
 	//task 3
-	task3.state = ButtonStart;
+	task3.state = WaitForButton;
 	task3.period = ButtonPeriod;
 	task3.elapsedTime = task3.period;
 	task3.TickFct = &ButtonTick;

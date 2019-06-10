@@ -69,11 +69,11 @@ int LightsTick(int state){
 	}
 	
 	switch (state){
-		case MotorsOff:
+		case LightsOff:
 			LightsOutput = 0x00;
 			break;
 		
-		case MotorsOn:
+		case LightsOn:
 			if (i == 0){
 				LightsOutput = 0x00;
 			}
@@ -81,7 +81,7 @@ int LightsTick(int state){
 				LightsOutput = 0x01;
 			}
 			else {
-				LightsOutput = 0x03;
+				LightsOutput = 0x05;
 			}
 			
 			if (i < 3){
@@ -98,7 +98,7 @@ int LightsTick(int state){
 			break;
 		
 		case BreakLights:
-			LightsOutput = 0xFF; //LIGHTS ON
+			LightsOutput = 0x05; //LIGHTS ON
 			break;
 			
 		default:

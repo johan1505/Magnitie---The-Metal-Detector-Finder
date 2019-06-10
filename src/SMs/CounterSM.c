@@ -1,24 +1,26 @@
 
-enum CounterStates {CounterStart, Wait, CheckForMetals} CounterState;
+enum CounterStates {CounterStart, WaitCounter, CheckForMetals} CounterState;
 //Global variables
-unsigned int  MetalsFound;
 unsigned char MetalDetected;
 unsigned char buttonPressed;
 
+//Helper function
+void DisplayMetalsFound(int MetalsFound);
 
 int CounterTick(int state){
+	static unsigned int MetalsFound;
     switch (state){
         case CounterStart:
 			if (!buttonPressed){
 				state = CounterStart;
 			}
 			else {
-				state = Wait;
+				state = WaitCounter;
 				MetalsFound = 0;
 			}
             break;
 			
-		case Wait:
+		case WaitCounter:
 			if (MetalDetected){
 				state = CheckForMetals;
 				if (MetalsFound >= 9999){ // If the number of metalsfound is 9999 than set it to 0
@@ -31,17 +33,16 @@ int CounterTick(int state){
 				DisplayMetalsFound(MetalsFound);
 			}
 			else {
-				state = Wait;
+				state = WaitCounter;
 			}
 			break;
 				
         case CheckForMetals:
-            state = CheckForMetals;
             if (MetalDetected){ // if a metal objects is detected then increase the number of metals found otherwise, else keep the current number
                 state = CheckForMetals;
             }
 			else {
-				state = Wait;	
+				state = WaitCounter;	
 			}
             break;                
 
