@@ -8,7 +8,9 @@ This repository contains information about my custom final project for the class
 
 Magnitie is a four-wheel robot capable of finding small size metal objects such as coins, clips, nails, and keys as he travels. The user controls Magnitie with a button that makes it start moving only in a straight direction. When traveling, if the inductive sensor of Magnitie detects a metal object, Magnitie stops so that the user can pick up the metal object found. After stopping, Magnitie waits for the user to make it start moving again. If Magnitie is ever close to collide with an obstacle, it will stop so that the user can either remove the obstacle or change its direction. Furthermore, Magnitie displays a smiling face on its LCD after finding a metal object and a sad face if it gets stopped due to an obstacle.
 
-![Magnitie](https://github.com/johan1505/Magnitie---The-Metal-Detector-Finder/blob/master/Images/20190614_150317.jpg?raw=true)
+![Magnitie1](https://github.com/johan1505/Magnitie---The-Metal-Detector-Finder/blob/master/Images/20190614_150317.jpg?raw=true)
+
+![Magnitie2](https://github.com/johan1505/Magnitie---The-Metal-Detector-Finder/blob/master/Images/20190614_150324.jpg?raw=true)
 
 ## User Guide
 
@@ -69,3 +71,21 @@ Note: The equipment that was not taught in this course has been bolded.
 	- Ultrasonic sensor trigger
 
 	![PINOUT](https://github.com/johan1505/Magnitie---The-Metal-Detector-Finder/blob/master/Images/PINOUT.png?raw=true)
+
+## Known Bugs and ShortComings
+
+- Sometimes the start button requires to be pressed with some pressure for it to make the robot start. This can be fixed by purchasing a better quality button.
+- The circuitry of the robot is very sensitive. Touching or moving the wires that connect the ultrasonic sensor the the microcontroller can make it not work properly and always recognize an obstacle in front of it. This can be fixed by covering the robot with some type of shell so that the user doesn’t have access to the internal circuitry
+- The robot can miss some metal objects if they happen to not be close enough to the range of detection of the metal detector's orange tip. This issue can be fixed by purchasing and installing a stronger inductive proximity sensor capable of detecting smaller metal objects at a furthest distance.
+- Sometimes the robot does not travel in a straight line due to the front wheels. This can be fixed by replacing them with motorized wheels
+
+## Future Work
+
+- Make the robot be able to change its direction as it travels
+- Make the robot be controlled via bluetooth using an extra microcontroller
+- Improve the accuracy of the obstacles' distances detected by the ultrasonic sensor
+- Add 2 extra DC motors with wheels at the front of the robot
+
+## Demo Youtube video 
+
+[Demo video](https://www.youtube.com/watch?v=jZ6i17GJ6Yc&feature=youtu.be)
