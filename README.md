@@ -17,7 +17,7 @@ Magnitie is a four-wheel robot capable of finding small size metal objects such 
 - Magnitie comes with the HC-S04 ultrasonic sensor which enables it to detect potential obstacles on its way
 - If before start moving the ultrasonic sensor detects an obstacle 19 (or less) inches away  from its front side, it will not start its trajectory even if the start button is being pressed, and it will display a warning about the obstacle on its LCD.
 
-![OBSTACLE DETECTED]()
+![OBSTACLE DETECTED](https://github.com/johan1505/Magnitie---The-Metal-Detector-Finder/blob/master/Images/Obstacle1.jpg?raw=true)
 
 - Once Magnitie starts moving, it travels in a straight line and displays a its face on the LCD
 - Once in movement, the robot can stop for two reasons:
@@ -27,14 +27,14 @@ Magnitie is a four-wheel robot capable of finding small size metal objects such 
 		- After the three seconds have passed, the robot changes its face back to normal and waits for its button to be pressed in order to start to move again. 
 		- If the robot detects a metal and stops right on top of it, the counter will only increase once, and the robot will not start to move until the found metal is removed from the range of the inductive sensor 
 
-		![METAL DETECTED AND HAPPY FACE](https://github.com/johan1505/Magnitie---The-Metal-Detector-Finder/blob/master/Images/ClearAndMetalFound.jpg?raw=true)
+		![METAL DETECTED AND HAPPY FACE](https://github.com/johan1505/Magnitie---The-Metal-Detector-Finder/blob/master/Images/Clear.jpg?raw=true)
 
 	- Detecting an obstacle
 		- If the ultrasonic sensor of Magnitie detects an obstacle 19 (or less) inches away from its front side, the robot stops, and it displays a sad face and an “Obstacle detected” warning on its LCD (under the counter of metals found). 
 		- Magnitie will not move as long as the sensor keeps detecting an obstacle in front of it, even if the user presses the start button. 
 		- If a metal object happens to pass under the inductive sensor, the counter of found metals will increase but the LCD will still display a sad face and the warning.   
 
-		![OBSTACLE DETECTED AND SAD FACE]()
+		![OBSTACLE DETECTED AND SAD FACE](https://github.com/johan1505/Magnitie---The-Metal-Detector-Finder/blob/master/Images/Obstacle2.jpg?raw=true)
 
 ## Components Used
 
